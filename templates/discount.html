@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Discount Calculator</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Discount Calculator</h1>
+    <input type="number" id="price" placeholder="Original Price">
+    <input type="number" id="discount" placeholder="Discount %">
+    <button onclick="calculateDiscount()">Calculate</button>
+
+    <h2>Discounted Price: <span id="result">N/A</span></h2>
+    <a href="{{ url_for('home') }}"class = "btn">Back to Main Calculator</a>
+  </div>
+
+  <script>
+    async function calculateDiscount() {
+      const price = document.getElementById('price').value;
+      const discount = document.getElementById('discount').value;
+
+      const response = await fetch('/calculate_discount', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ price, discount })
+      });
+
+      const data = await response.json();
+      document.getElementById('result').innerText = data.discounted_price;
+    }
+  </script>
+</body>
+</html>
